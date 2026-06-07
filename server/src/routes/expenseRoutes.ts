@@ -5,6 +5,7 @@ import {
   listExpenses,
   updateExpense
 } from "../controllers/expenseController.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validate.js";
 import {
@@ -18,7 +19,7 @@ export const expenseRoutes = Router();
 
 expenseRoutes.use(requireAuth);
 
-expenseRoutes.get("/", validate(listExpensesSchema), listExpenses);
-expenseRoutes.post("/", validate(createExpenseSchema), createExpense);
-expenseRoutes.put("/:id", validate(updateExpenseSchema), updateExpense);
-expenseRoutes.delete("/:id", validate(expenseIdSchema), deleteExpense);
+expenseRoutes.get("/", validate(listExpensesSchema), asyncHandler(listExpenses));
+expenseRoutes.post("/", validate(createExpenseSchema), asyncHandler(createExpense));
+expenseRoutes.put("/:id", validate(updateExpenseSchema), asyncHandler(updateExpense));
+expenseRoutes.delete("/:id", validate(expenseIdSchema), asyncHandler(deleteExpense));
